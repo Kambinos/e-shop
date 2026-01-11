@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wishlist</title>
+
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #6366f1;
+      --danger: #ef4444;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ===== Header ===== */
+    header {
+      padding: 24px;
+      background: var(--card-bg);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ===== Container ===== */
+    .container {
+      max-width: 1200px;
+      padding: 24px;
+      margin: 0 auto;
+    }
+
+    /* ===== Wishlist grid ===== */
+    .wishlist {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    /* ===== Card ===== */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background .2s ease;
+    }
+
+    .btn-buy {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-buy:hover {
+      background: #4f46e5;
+    }
+
+    .btn-remove {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .btn-remove:hover {
+      background: #fecaca;
+    }
+
+    /* ===== Empty state ===== */
+    .empty {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 22px;
+      }
+
+      .card img {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Wishlist</h1>
+  <p>Товары, которые вы хотите купить позже</p>
+</header>
+
+<main class="container">
+  <section class="wishlist">
+
+    <!-- Card -->
+    <article class="card">
+      <img src="https://picsum.photos/400/300?1" alt="">
+      <div class="card-body">
+        <h3 class="card-title">Беспроводные наушники</h3>
+        <p class="card-desc">Шумоподавление, до 30 часов работы</p>
+
+        <div class="card-footer">
+          <span class="price">$129</span>
+          <div class="actions">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-remove">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card -->
+    <article class="card">
+      <img src="https://picsum.photos/400/300?2" alt="">
+      <div class="card-body">
+        <h3 class="card-title">Умные часы</h3>
+        <p class="card-desc">Мониторинг сна и активности</p>
+
+        <div class="card-footer">
+          <span class="price">$199</span>
+          <div class="actions">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-remove">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card -->
+    <article class="card">
+      <img src="https://picsum.photos/400/300?3" alt="">
+      <div class="card-body">
+        <h3 class="card-title">Ноутбук</h3>
+        <p class="card-desc">16 GB RAM · SSD 1 TB</p>
+
+        <div class="card-footer">
+          <span class="price">$1499</span>
+          <div class="actions">
+            <button class="btn btn-buy">Купить</button>
+            <button class="btn btn-remove">Удалить</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+</body>
+</html>

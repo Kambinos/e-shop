@@ -1,0 +1,57 @@
+/* style.css */
+
+.messages-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999; /* Чтобы было поверх всего */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 250px;
+    opacity: 1;
+    transition: opacity 0.5s ease; /* Плавное исчезновение */
+    position: relative;
+}
+
+/* Цвета для разных типов сообщений Django */
+.alert-success {
+    background-color: #28a745; /* Зеленый */
+}
+
+.alert-error, .alert-danger {
+    background-color: #dc3545; /* Красный */
+}
+
+.alert-warning {
+    background-color: #ffc107; /* Желтый */
+    color: #333;
+}
+
+.alert-info {
+    background-color: #17a2b8; /* Голубой */
+}
+
+/* Кнопка закрытия (крестик) */
+.close-btn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-btn:hover {
+    color: black;
+}

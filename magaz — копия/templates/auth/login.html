@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в аккаунт</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ===================================== */
+        /* 1. ПЕРЕМЕННЫЕ И ОСНОВНОЙ СТИЛЬ */
+        /* ===================================== */
+        :root {
+            --primary-color: #007bff; /* Синий акцент */
+            --light-bg: #f4f7f6; /* Светлый фон страницы */
+            --form-bg: #ffffff; /* Белый фон формы */
+            --input-bg: #f9f9f9;
+            --text-dark: #333333;
+            --text-secondary: #666;
+            --border-color: #e0e0e0;
+            --error-color: #dc3545; /* Красный для ошибок */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* ===================================== */
+        /* 2. СТИЛИ ДЛЯ УВЕДОМЛЕНИЙ (АЛЕРТОВ) */
+        /* ===================================== */
+        .alert-error {
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f8d7da; /* Светло-красный фон */
+            color: var(--error-color); /* Темно-красный текст */
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .alert-error strong {
+            font-weight: 600;
+        }
+
+
+        /* ===================================== */
+        /* 3. ФОРМА И КОНТЕЙНЕРЫ (ОСТАЛЬНОЕ) */
+        /* ===================================== */
+        .login-form {
+            max-width: 400px;
+            width: 100%;
+            padding: 40px;
+            background-color: var(--form-bg);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-title {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* ===================================== */
+        /* 4. ПОЛЯ ВВОДА И ИКОНКА ПАРОЛЯ */
+        /* ===================================== */
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 40px; 
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+
+        /* ===================================== */
+        /* 5. КНОПКА И ССЫЛКИ */
+        /* ===================================== */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: var(--form-bg); /* Белый текст на синей кнопке */
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .form-link {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .register-link, .reset-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .register-link:hover, .reset-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        /* ===================================== */
+        /* 6. АДАПТИВНОСТЬ (RESPONSIVE) */
+        /* ===================================== */
+        @media (max-width: 500px) {
+            .login-form {
+                padding: 25px 20px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <form action="" method='POST' class="login-form">
+        {% csrf_token %} 
+        
+        <!-- БЛОК ДЛЯ ОТОБРАЖЕНИЯ СООБЩЕНИЙ ОШИБОК ИЗ DJANGO MESSAGES -->
+        {% if messages %}
+            {% for message in messages %}
+                <!-- Предполагаем, что неуспешный вход всегда будет иметь тег 'error' -->
+                {% if 'error' in message.tags %}
+                    <div class="alert-error" role="alert">
+                        <strong>{{ message }}</strong>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <!-- БЛОК ДЛЯ ОТОБРАЖЕНИЯ ОШИБОК, НЕ СВЯЗАННЫХ С ПОЛЯМИ (NON_FIELD_ERRORS) -->
+        {% if form.non_field_errors %}
+            <div class="alert-error" role="alert">
+                {% for error in form.non_field_errors %}
+                    <strong>{{ error }}</strong>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <h3 class="form-title"><strong>Login to Your Account</strong></h3>
+
+        <div class="form-group">
+            <label for="id_username" class="form-label">Email Address</label>
+            <input 
+                class="input-field" 
+                type="email" 
+                name="username" 
+                id="id_username" 
+                placeholder="Enter email-address"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="id_password" class="form-label">Password</label>
+            <input 
+                class="input-field" 
+                type="password" 
+                name="password" 
+                id="id_password" 
+                placeholder="Enter password"
+                required
+            >
+            <span class="toggle-password" onclick="togglePasswordVisibility()">
+                <i class="fas fa-eye" id="toggleIcon"></i>
+            </span>
+        </div>
+        
+        <button type="submit" class="submit-btn">Login</button>
+        
+        <p class="form-link">
+            Don't have an account? <a href="{% url 'base:register' %}" class="register-link">Register</a>
+        </p>
+        <p class="form-link">
+            <a href="{% url 'base:password_reset' %}" class="reset-link">Forgot Password?</a>
+        </p>
+
+    </form>
+</div>
+
+<script>
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById('id_password');
+        const toggleIcon = document.getElementById('toggleIcon');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+</script>
+
+</body>
+</html>

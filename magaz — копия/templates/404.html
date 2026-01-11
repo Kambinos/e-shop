@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Страница не найдена | E-Shop</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-blue: #3b82f6;
+            --bg-light: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        body.dark-mode {
+            --bg-light: #111827;
+            --card-bg: #1f2937;
+            --text-main: #f9fafb;
+            --border-color: #374151;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            margin: 0;
+        }
+
+        .btn-home {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            background-color: #2563eb;
+        }
+
+        .error-code {
+            font-size: clamp(5rem, 20vw, 10rem); /* Адаптивный размер */
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
+        
+        /* Изменено здесь: убрали margin-top: auto из CSS, так как используем Tailwind */
+        .footer { background: #1a1a1a; color: white; padding: 40px 0; }
+        
+        .logo a { color: var(--primary-blue); font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+    <header class="header py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="logo">
+                <a href="/">
+                    <i class="fas fa-store"></i>
+                    <span>E-Shop</span>
+                </a>
+            </div>
+            <nav class="hidden md:flex gap-6">
+                <a href="/" class="hover:text-blue-500">Home</a>
+                <a href="{% url 'base:products' %}" class="hover:text-blue-500">Products</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-10">
+        <div class="text-center px-4">
+            <div class="relative">
+                <h1 class="error-code">404</h1>
+                <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                    <i class="fas fa-search fa-9x"></i>
+                </div>
+            </div>
+            
+            <h2 class="text-3xl font-bold mt-4 mb-2">Упс! Страница не найдена</h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                Похоже, мы не можем найти страницу, которую вы ищете. Возможно, она была перемещена или удалена.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/" class="btn-home">
+                    <i data-feather="home"></i>
+                    На главную
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p class="text-gray-500">&copy; 2025 E-Shop. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>

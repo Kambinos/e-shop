@@ -1,0 +1,411 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static './css/normalize.css'%}">
+  <link rel="stylesheet" href="{% static './css/styles.css'%}">
+  <link rel="stylesheet" href="{% static './css/products.css'%}">
+  <link rel="stylesheet" href="{% static './css/alerts.css' %}">
+  <title>Mahsulotlar - E-Shop</title>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <!-- Logo Section -->
+        <div class="header-left">
+          <a class="site-logo" href="{% url 'base:home' %}">  
+            <img class="site-logo__img" src="{% static 'images/logo.svg' %}" alt="Shop Logo">
+          </a>
+        </div>
+
+        <!-- Navigation Section -->
+        <nav class="header-nav">
+          <ul class="nav-list">
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="{% url 'base:home' %}">
+                <i class="nav-icon">🏠</i>
+                <span>Asosiy</span>
+              </a>
+            </li>
+            <li class="nav-list__item">
+              <a class="nav-list__link nav-list__link--active" href="{% url 'base:product_list' %}">
+                <i class="nav-icon">🛍️</i>
+                <span>Do'kon</span>
+              </a>
+            </li>
+            </li>
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="#">
+                <i class="nav-icon">📂</i>
+                <span>Kategoriya</span>
+              </a>
+            </li>
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="#">
+                <i class="nav-icon">ℹ️</i>
+                <span>Biz haqimizda</span>
+              </a>
+            </li>
+            <li class="nav-list__item">
+              <a class="nav-list__link" href="#">
+                <i class="nav-icon">📞</i>
+                <span>Aloqa</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Search Section -->
+        <div class="header-search">
+          <form method="get" class="search-form">
+            <div class="search-wrapper">
+              <input type="text" name="search" placeholder="Mahsulot qidirish..." 
+                     value="{{ request.GET.search|default:'' }}" class="search-input">
+              <button type="submit" class="search-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19S2 15.194 2 10.5 5.806 2 10.5 2 19 5.806 19 10.5Z" 
+                        stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right Section -->
+        <div class="header-right">
+          <!-- User Actions -->
+          <div class="user-actions">
+            
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'base:profile' %}" class="action-btn" >Profile</a>
+            <a href="{% url 'base:cart' %}" class="action-btn">Cart</a>
+            {%else%}
+            <a href="{% url 'base:register' %}" class="action-btn" >Reg</a>
+            <a href="{% url 'base:signin' %}" class="action-btn" >Login</a>
+            {% endif %}
+
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" 
+                      stroke="currentColor" stroke-width="2"/>
+                <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" 
+                      stroke="currentColor" stroke-width="2"/>
+                <path d="M1 1H5L7.68 14.39A2 2 0 0 0 9.62 16H19.4A2 2 0 0 0 21.38 14.39L23 6H6" 
+                      stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span class="action-count">0</span>
+            </a>
+          </div>
+
+          <!-- Social Links -->
+          <div class="social-links">
+            <a href="#" class="social-link" title="Telegram">
+              <img src="{% static 'images/telegram.svg' %}" alt="Telegram">
+            </a>
+            <a href="#" class="social-link" title="Instagram">
+              <img src="{% static 'images/instagram.svg' %}" alt="Instagram">
+            </a>
+          </div>
+
+          <!-- Mobile Menu Toggle -->
+          <button class="mobile-menu-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <div class="product-hero">
+          <div class="tabs-box">
+            <div class="close-btn">
+              <span></span>
+              <span></span>
+            </div>
+            
+            <div class="categorys-box">
+              <h2 class="categorys__title">Kategoriyalar <img src="{% static 'images/top-arrow.svg' %}" alt="arrow"></h2>
+              <ul class="categorys__list">
+                <li class="categorys-list__item {% if not category %}selected{% endif %}">
+                  <a href="{% url 'base:product_list' %}">Barcha kategoriyalar</a>
+                </li>
+                {% for c in categories%}
+                <li class="categorys-list__item {% if category.slug == c.slug %}selected{% endif %}">
+                  <a href="{{c.get_absolute_url}}">{{c.name}}</a>
+                </li>
+                {%endfor%}
+              </ul>
+            </div>
+
+            <div class="manufacturers-box">
+              <h2 class="manufacturers__title">Ishlab chiqaruvchi <img src="{% static 'images/top-arrow.svg' %}" alt="arrow"></h2>
+              <form method="get" class="manufacturers__list" id="brandFilter">
+                {% for b in brands %}
+                <div class="manufacturer-item">
+                  <input type="checkbox" id="brand_{{b.id}}" name="brand" value="{{b.slug}}" 
+                         {% if b.slug in selected_brands %}checked{% endif %}>
+                  <label for="brand_{{b.id}}">{{b.name}}</label>
+                </div>
+                {% endfor %}
+                {% if not brands %}
+                <div class="manufacturer-item">
+                  <input type="checkbox" id="samsung" name="brand" value="samsung">
+                  <label for="samsung">Samsung</label>
+                </div>
+                {% endif %}
+              </form>
+            </div>
+
+            <div class="price-box">
+              <h2 class="price__title">Narxi <img src="{% static 'images/top-arrow.svg' %}" alt="arrow"></h2>
+              <div class="price__list">
+                <form method="get" id="priceFilter">
+                  <div class="price-inputs">
+                    <input type="number" id="min_price" name="min_price" placeholder="Min narx" 
+                           value="{{ request.GET.min_price|default:'' }}" min="0">
+                    <span>-</span>
+                    <input type="number" id="max_price" name="max_price" placeholder="Max narx" 
+                           value="{{ request.GET.max_price|default:'' }}" min="0">
+                  </div>
+                  <div class="price-box__result">
+                    <span id="price_display">{{ request.GET.min_price|default:'5.00' }}</span> - 
+                    <span id="price_display_max">{{ request.GET.max_price|default:'90.00' }}</span>
+                  </div>
+                  <input type="range" id="price_range" min="5" max="100" value="{{ request.GET.max_price|default:'90' }}">
+                </form>
+              </div>
+            </div>
+
+            <div class="filter-actions">
+              <button type="button" class="apply-filters-btn">Filtrlarni qo'llash</button>
+              <button type="button" class="restart-btn">Barchasini qaytarish</button>
+            </div>
+          </div>
+
+          <div class="products-box">
+            <div class="products-title__box">
+              <h2 class="products-box__title">
+                {% if category %}
+                  {{category.name}} 
+                {% elif request.GET.search %}
+                  "{{request.GET.search}}" bo'yicha qidiruv natijalari
+                {% else %}
+                  Barcha mahsulotlar
+                {% endif %}
+                <span class="products-count">({{products.count}} ta)</span>
+              </h2>
+              <a class="products-box__btn" href="#">
+                <img src="{% static 'images/filter-btn.png' %}" alt="filter btn icon">
+              </a>
+            </div>
+
+            {% if products %}
+              <div class="products-grid">
+                {% for product in products %}
+                <div class="cards">
+                  <div class="card">
+                    {% if product.image %}
+                    <img class="card__img" src="{{product.image.url}}" alt="{{product.name}}">
+                    {% else %}
+                    <img class="card__img" src="{% static 'images/no_image.png' %}" alt="{{product.name}}">
+                    {% endif %}
+                    <div class="card__content">
+                      <ul class="star-list">
+                        <li class="star-list__item">
+                          <img src="{% static 'images/stars.png' %}" alt="star">
+                        </li>
+                        <li class="star-list__item">
+                          <img src="{% static 'images/stars.png' %}" alt="star">
+                        </li>
+                        <li class="star-list__item">
+                          <img src="{% static 'images/stars.png' %}" alt="star">
+                        </li>
+                        <li class="star-list__item">
+                          <img src="{% static 'images/stars.png' %}" alt="star">
+                        </li>
+                        <li class="star-list__item">
+                          <img src="{% static 'images/stars.png' %}" alt="star">
+                        </li>
+                      </ul>
+                      <a href="{{product.get_absolute_url}}">
+                      <h2 class="content__title">{{product.name}}</h2>
+                      </a>
+                      <div class="content__price">
+                        <span>${{product.price}}</span>
+                        <span class="old-price">${{product.price|floatformat:0|add:"300"}}</span>
+                      </div>
+                      <p class="content__comment">{{product.description | truncatechars:150}}</p>
+                      <div class="content-btns">
+                        <a href="{% url 'base:product_detail' product.id product.slug %}"><button class="content__btn">Sotib olish</button></a>
+                            <button class="content__shop-btn"><img src="{% static 'images/shopping-cart.svg' %}" alt=""></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor%}
+              </div>
+            {% else %}
+              <div class="no-products">
+                <div class="no-products-icon">🔍</div>
+                <h3>Mahsulotlar topilmadi</h3>
+                <p>
+                  {% if request.GET.search %}
+                    "{{request.GET.search}}" so'rovi bo'yicha hech narsa topilmadi.
+                  {% elif category %}
+                    {{category.name}} kategoriyasida mahsulotlar mavjud emas.
+                  {% else %}
+                    Hozircha mahsulotlar mavjud emas.
+                  {% endif %}
+                </p>
+                <a href="{% url 'base:product_list' %}" class="back-to-products">Barcha mahsulotlarga qaytish</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <a class="footer-logo__link" href="{% url 'base:home' %}">
+            <img src="{% static 'images/logo-footer.svg' %}" alt="Logo">
+          </a>
+
+          <p class="footer-logo__info">
+            Sed vitae feugiat mi, id lacus. Viverra tortor, facilisis at sed facilisi sed. Nisi imperdiet nibh et,
+            sodales. .
+          </p>
+        </div>
+
+        <div class="footer-menu">
+          <h2 class="footer-menu__title">Menu</h2>
+          <ul class="footer-menu__list">
+            <li class="footer-menu__list-item">
+              <a class="footer-menu__list-link" href="#">Asosiy</a>
+            </li>
+            <li class="footer-menu__list-item">
+              <a class="footer-menu__list-link" href="#">Do'kon</a>
+            </li>
+            <li class="footer-menu__list-item">
+              <a class="footer-menu__list-link" href="#">Kategoriya</a>
+            </li>
+            <li class="footer-menu__list-item">
+              <a class="footer-menu__list-link" href="#">Biz haqimizda</a>
+            </li>
+            <li class="footer-menu__list-item">
+              <a class="footer-menu__list-link" href="#">Aloqa</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-products">
+          <h2 class="footer-products__title">Mahsulot</h2>
+          <ul class="footer-products__list">
+            <li class="footer-products__list-item">
+              <a class="footer-products__list-link" href="#">Mahsulotlar</a>
+            </li>
+            <li class="footer-products__list-item">
+              <a class="footer-products__list-link" href="#">Top mahsulotalr</a>
+            </li>
+            <li class="footer-products__list-item">
+              <a class="footer-products__list-link" href="#">Eng ko'p sotilgan</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-shop">
+          <h2 class="footer-shop__title">Shop</h2>
+          <ul class="footer-shop__list">
+            <li class="footer-shop__list-item">
+              <a class="footer-shop__list-link" href="#">Savatcha</a>
+            </li>
+            <li class="footer-shop__list-item">
+              <a class="footer-shop__list-link" href="#">Kategoriya</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h2 class="footer-contact__title">Aloqa</h2>
+          <ul class="footer-contact__list">
+            <li class="footer-contact__list-item">
+              <a class="footer-contact__list-link" href="#">(+089) 19918989 - 0123456789</a>
+            </li>
+            <li class="footer-contact__list-item">
+              <a class="footer-contact__list-link" href="#">onlinestore.sydney@gmail.com</a>
+            </li>
+            <li class="footer-contact__list-item">
+              <a class="footer-contact__list-link" href="#">14 LE Gounlburn St, Sydney 119NSA</a>
+            </li>
+          </ul>
+
+          <h3 class="footer-brands__title">Bizga azo bo'ling:</h3>
+          <div class="footer-brands">
+            <a href="#">
+              <img src="{% static 'images/footer-facebook.png' %}" alt="facebook icon">
+            </a>
+            <a href="#">
+              <img src="{% static 'images/footer-twitter.png' %}" alt="twitter icon">
+            </a>
+            <a href="#">
+              <img src="{% static 'images/footer-instagramm.png' %}" alt="instagram icon">
+            </a>
+            <a href="#">
+              <img src="{% static 'images/footer-youtube.png' %}" alt="youtube icon">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+<script>
+    // Ждем полной загрузки страницы
+    document.addEventListener("DOMContentLoaded", function() {
+        // Находим все сообщения
+        const alerts = document.querySelectorAll('.alert');
+
+        if (alerts.length > 0) {
+            // Устанавливаем таймер на 5 секунд (5000 мс)
+            setTimeout(function() {
+                alerts.forEach(function(alert) {
+                    // Сначала делаем прозрачным (для красивого эффекта)
+                    alert.style.opacity = '0';
+                    
+                    // Через полсекунды удаляем из DOM полностью
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 500); 
+                });
+            }, 5000); 
+        }
+    });
+</script>
+  <script src="{% static './js/script.js'%}"></script>
+  <script src="{% static './js/products.js'%}"></script>
+</body>
+
+</html>

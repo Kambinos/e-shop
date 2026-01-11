@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <!-- Подключаем иконки Font Awesome для глаза -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ===================================== */
+        /* 1. ПЕРЕМЕННЫЕ И ОСНОВНОЙ СТИЛЬ */
+        /* ===================================== */
+        :root {
+            --primary-color: #007bff; /* Синий акцент */
+            --light-bg: #f4f7f6; /* Светлый фон страницы */
+            --form-bg: #ffffff; /* Белый фон формы */
+            --input-bg: #f9f9f9;
+            --text-dark: #333333;
+            --text-secondary: #666;
+            --border-color: #e0e0e0;
+            --error-color: #dc3545; /* Красный для ошибок */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* ===================================== */
+        /* 2. ФОРМА И КАРТОЧКА */
+        /* ===================================== */
+        .auth-form {
+            max-width: 450px;
+            width: 100%;
+            padding: 40px;
+            background-color: var(--form-bg);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-title {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .form-field-group {
+            margin-bottom: 20px;
+            position: relative; /* Обязательно для позиционирования иконки */
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* ===================================== */
+        /* 3. ПОЛЯ ВВОДА И ТОГГЛ ПАРОЛЯ */
+        /* ===================================== */
+        
+        /* Универсальный стиль для всех полей */
+        .auth-form input[type="text"],
+        .auth-form input[type="email"],
+        .auth-form input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        /* Стилизация фокусировки */
+        .auth-form input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        /* КОНТЕЙНЕР ДЛЯ ПОЛЯ И ИКОНКИ (создается JS) */
+        .password-input-wrapper {
+            position: relative;
+        }
+        
+        /* ИКОНКА "ПОКАЗАТЬ ПАРОЛЬ" */
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: color 0.2s, opacity 0.2s;
+            z-index: 10;
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+
+        /* Стилизация ошибок */
+        .field-error-text {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* ===================================== */
+        /* 4. КНОПКА И ССЫЛКИ */
+        /* ===================================== */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: var(--form-bg);
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .form-link-group {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .login-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        /* ===================================== */
+        /* 5. АДАПТИВНОСТЬ */
+        /* ===================================== */
+        @media (max-width: 500px) {
+            .auth-form {
+                padding: 25px 20px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-form">
+    <form action="" method='POST' id="signupForm">
+        {% csrf_token %}
+        <h3 class="form-title"><strong>Signup Form</strong></h3>
+
+        {% for field in form %}
+        
+            {% if field.errors %}
+            <div class="form-field-group">
+                <label class="form-label">{{ field.label }}</label>
+                {{field}}
+                
+                <span class="field-error-text">{{ field.errors }}</span>
+            </div>
+
+            {% else %}
+            
+            <div class="form-field-group">
+                <label class="form-label">{{ field.label }}</label>
+                {{field}}
+            </div>
+
+            {% endif %}
+        {% endfor %}
+            
+        <button type="submit" class="submit-btn">Register</button>
+        
+        <p class="form-link-group">
+            Already have an account? <a href="{% url 'base:signin' %}" class="login-link">Login</a>
+        </p>
+
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Находим все поля ввода пароля
+        const passwordFields = document.querySelectorAll('#signupForm input[type="password"]');
+
+        passwordFields.forEach(field => {
+            // 1. Создаем обертку для поля и иконки
+            const wrapper = document.createElement('div');
+            wrapper.className = 'password-input-wrapper';
+            
+            // Получаем родительский div (form-field-group)
+            const parentGroup = field.closest('.form-field-group');
+
+            if (!parentGroup) return; // Если не нашли родителя, выходим
+            
+            // 2. Создаем иконку
+            const toggleIcon = document.createElement('i');
+            toggleIcon.className = 'fas fa-eye toggle-password';
+            
+            // 3. Перемещаем поле внутрь обертки
+            field.parentNode.insertBefore(wrapper, field);
+            wrapper.appendChild(field);
+            
+            // 4. Добавляем иконку в обертку
+            wrapper.appendChild(toggleIcon);
+            
+            // 5. Добавляем обработчик клика
+            toggleIcon.addEventListener('click', () => {
+                const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+                field.setAttribute('type', type);
+                
+                // Переключаем иконку глаза (открытый/закрытый)
+                toggleIcon.classList.toggle('fa-eye');
+                toggleIcon.classList.toggle('fa-eye-slash');
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
